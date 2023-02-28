@@ -1,4 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_sms_auth/feature/view/auth_sms_view.dart';
+import 'package:firebase_sms_auth/feature/view/otp_verification_view.dart';
+import 'package:firebase_sms_auth/feature/view/success_view.dart';
 import 'package:firebase_sms_auth/firebase_options.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +17,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: "/",
+      routes: {
+        "/": (context) => const AuthSmsView(),
+        "/otp": (context) =>  OtpVerificationView(),
+        "/success": (context) => const SuccessView(),
+      },
       title: 'Sms_Auth',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
