@@ -1,46 +1,133 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_sms_auth/feature/view/otp_verification_view.dart';
+import 'package:firebase_sms_auth/feature/viewModel/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../product/widget/custom_dropdownfield.dart';
+import '../../product/widget/custom_elevated_btn.dart';
 
 class AuthSmsView extends StatelessWidget {
   const AuthSmsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    TextEditingController controller = TextEditingController();
     return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          children: [
-            TextField(
-              controller: controller,
-              decoration: const InputDecoration(hintText: "Phone Number"),
-              keyboardType: TextInputType.number,
+      body: SingleChildScrollView(
+        child: BlocConsumer<AuthCubit, AuthState>(
+          listener: (context, state) {},
+          builder: (context, state) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 60),
+            child: Center(
+              child: Column(
+                children: [
+                  const Align(
+                    alignment: Alignment.topLeft,
+                    child: Icon(Icons.arrow_back_ios_rounded),
+                  ),
+                  Image.asset("assets/sun.PNG"),
+                  buildText(
+                      context,
+                      "Mobil Uygulamayı Kullanmak için lütfen giriş\n yapınız.",
+                      15,
+                      FontWeight.bold,
+                      textAlign: TextAlign.center),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      buildText(
+                          context,
+                          "Bilgisayar şifrem yok. SMS ile şifre almak\n istiyorum",
+                          15,
+                          FontWeight.bold),
+                      const SizedBox(width: 10),
+                      Switch(
+                        activeColor: Colors.red,
+                        value: context.read<AuthCubit>().swtchValue,
+                        onChanged: (value) {
+                          context.read<AuthCubit>().onChangeSwitch(value);
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  CustomDropDownFormField(
+                    items: context.read<AuthCubit>().selectItems,
+                    value: context.read<AuthCubit>().selectedValue,
+                    onChanged: (value) {
+                      context.read<AuthCubit>().onSelectedValue(value!);
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  CustomDropDownFormField(
+                    items: context.read<AuthCubit>().selectTRR,
+                    value: context.read<AuthCubit>().selectedValueTR,
+                    onChanged: (value) {
+                      context.read<AuthCubit>().onSelectedValueTR(value!);
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    children: [
+                      /* Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: DropdownButton(
+                            isExpanded: false,
+                            borderRadius: BorderRadius.circular(10),
+                            value: context.read<AuthCubit>().selectedValueCode,
+                            items: context.read<AuthCubit>().selectCode,
+                            onChanged: null,
+                          ),
+                        ),
+                      ), */
+
+                      SizedBox(
+                        width: 360,
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          initialValue: "+90",
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(20)),
+                            border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(15)),
+                            filled: true,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  CustomElevatedButton(
+                    minimumSize: const Size(double.infinity, 50),
+                    backgroundColor: Colors.red.shade400,
+                    foregroundColor: Colors.white,
+                    onPressed: () {},
+                    data: "SUBMİT",
+                  ),
+                ],
+              ),
             ),
-            ElevatedButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.verifyPhoneNumber(
-                    phoneNumber: '+44 7123 123 456',
-                    verificationCompleted:
-                        (PhoneAuthCredential credential) async {
-                      await auth.signInWithCredential(credential);
-                    },
-                    verificationFailed: (FirebaseAuthException e) {},
-                    codeSent: (String verificationId, int? resendToken) {
-                      Navigator.of(context).push(PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            OtpVerificationView(verificationId: verificationId),
-                      ));
-                    },
-                    codeAutoRetrievalTimeout: (String verificationId) {},
-                  );
-                },
-                child: const Text("Next Otp")),
-          ],
+          ),
         ),
       ),
+    );
+  }
+
+  //buildText Method
+  Widget buildText(BuildContext context, String text, double fontSize,
+      FontWeight fontWeightBold,
+      {TextAlign? textAlign}) {
+    return Text(
+      textAlign: textAlign,
+      text,
+      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+            fontSize: fontSize,
+            fontWeight: fontWeightBold,
+          ),
     );
   }
 }

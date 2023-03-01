@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_sms_auth/feature/view/success_view.dart';
 import 'package:flutter/material.dart';

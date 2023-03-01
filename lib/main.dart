@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_sms_auth/feature/view/auth_sms_view.dart';
 import 'package:firebase_sms_auth/feature/view/otp_verification_view.dart';
 import 'package:firebase_sms_auth/feature/view/success_view.dart';
+import 'package:firebase_sms_auth/feature/viewModel/cubit/auth_cubit.dart';
 import 'package:firebase_sms_auth/firebase_options.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,20 +18,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: "/",
-      routes: {
-        "/": (context) => const AuthSmsView(),
-        "/otp": (context) =>  OtpVerificationView(),
-        "/success": (context) => const SuccessView(),
-      },
-      title: 'Sms_Auth',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return BlocProvider<AuthCubit>(
+      create: (context) => AuthCubit(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Sms_Auth',
+        theme: ThemeData(useMaterial3: true),
+        initialRoute: "/",
+        routes: {
+          "/": (context) => const AuthSmsView(),
+          "/otp": (context) => const OtpVerificationView(),
+          "/success": (context) => const SuccessView(),
+        },
       ),
-      //home:
     );
   }
 }
