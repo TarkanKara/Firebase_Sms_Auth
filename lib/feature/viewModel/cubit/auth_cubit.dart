@@ -1,9 +1,14 @@
+// ignore_for_file: avoid_print, unused_local_variable
+
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  TextEditingController controller = TextEditingController();
   AuthCubit() : super(AuthInitial());
 
   //
@@ -11,6 +16,8 @@ class AuthCubit extends Cubit<AuthState> {
   String selectedValue = "VBT";
   String selectedValueTR = "TR";
   String selectedValueCode = "TR";
+
+  String? _verificationId;
 
   //dropDownItems
   List<DropdownMenuItem<String>> selectItems = [
@@ -39,5 +46,46 @@ class AuthCubit extends Cubit<AuthState> {
 
   onSelectedValueTR(String value) {
     selectedValueTR = value;
+  }
+
+  //sendOTP
+  Future<void> sendOTP(String phoneNumber) async {
+    await auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (phoneAuthCredential) {
+        signInWithPhone(phoneAuthCredential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          print('The provided phone number is not valid.');
+        }
+      },
+      codeSent: (verificationId, forceResendingToken) {
+        _verificationId = verificationId;
+        emit(AuthCodeSent());
+      },
+      codeAutoRetrievalTimeout: (verificationId) {
+        _verificationId = verificationId;
+      },
+    );
+  }
+
+  //verificationOTP
+  void verificationOTP(String smsCode) {
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: _verificationId!, smsCode: smsCode);
+    signInWithPhone(credential);
+  }
+
+  //SignInPhone
+  Future<void> signInWithPhone(PhoneAuthCredential credential) async {
+    try {
+      UserCredential user = await auth.signInWithCredential(credential);
+      if (user.user != null) {
+        emit(AuthLoggedIn());
+      }
+    } on FirebaseAuthException catch (e) {
+      print("Exception :${Exception(e)}");
+    }
   }
 }

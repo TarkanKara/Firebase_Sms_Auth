@@ -1,3 +1,4 @@
+import 'package:firebase_sms_auth/feature/view/otp_verification_view.dart';
 import 'package:firebase_sms_auth/feature/viewModel/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,14 +7,22 @@ import '../../product/widget/custom_dropdownfield.dart';
 import '../../product/widget/custom_elevated_btn.dart';
 
 class AuthSmsView extends StatelessWidget {
-  const AuthSmsView({super.key});
+  final TextEditingController phoneController = TextEditingController();
+  AuthSmsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: BlocConsumer<AuthCubit, AuthState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if (state is AuthCodeSent) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const OtpVerificationView()));
+            }
+          },
           builder: (context, state) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 60),
             child: Center(
@@ -85,8 +94,9 @@ class AuthSmsView extends StatelessWidget {
                       SizedBox(
                         width: 360,
                         child: TextFormField(
+                          controller: phoneController,
                           keyboardType: TextInputType.number,
-                          initialValue: "+90",
+                          //initialValue: "+90",
                           decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(color: Colors.red),
@@ -105,7 +115,11 @@ class AuthSmsView extends StatelessWidget {
                     minimumSize: const Size(double.infinity, 50),
                     backgroundColor: Colors.red.shade400,
                     foregroundColor: Colors.white,
-                    onPressed: () {},
+                    onPressed: () {
+                      String phoneNumber = "+90${phoneController.text.trim()}";
+                      //BlocProvider.of<AuthCubit>(context).sendOTP(phoneNumber);
+                      context.read<AuthCubit>().sendOTP(phoneNumber);
+                    },
                     data: "SUBMİT",
                   ),
                 ],

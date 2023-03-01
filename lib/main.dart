@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(useMaterial3: true),
         initialRoute: "/",
         routes: {
-          "/": (context) => const AuthSmsView(),
+          "/": (context) =>  AuthSmsView(),
           "/otp": (context) => const OtpVerificationView(),
           "/success": (context) => const SuccessView(),
         },

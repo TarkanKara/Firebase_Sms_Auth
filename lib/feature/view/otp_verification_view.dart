@@ -1,14 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_sms_auth/feature/view/success_view.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpVerificationView extends StatelessWidget {
-  final String? verificationId;
-
-  const OtpVerificationView({super.key, this.verificationId});
+  const OtpVerificationView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,20 +55,7 @@ class OtpVerificationView extends StatelessWidget {
               ),
               const Expanded(child: SizedBox()),
               InkWell(
-                onTap: () async {
-                  PhoneAuthCredential credential = PhoneAuthProvider.credential(
-                    verificationId: verificationId!,
-                    smsCode: otpController.text,
-                  );
-                  // Sign the user in (or link) with the credential
-                  await auth.signInWithCredential(credential);
-                  if (auth.currentUser?.uid != null) {
-                    Navigator.of(context).push(PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const SuccessView(),
-                    ));
-                  }
-                },
+                onTap: () {},
                 child: Container(
                   height: 50,
                   width: double.infinity,
