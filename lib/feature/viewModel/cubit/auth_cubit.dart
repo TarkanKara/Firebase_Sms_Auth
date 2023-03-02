@@ -2,6 +2,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_sms_auth/core/firebase_auth.dart';
 import 'package:firebase_sms_auth/feature/utils/snackbar.dart';
 import 'package:firebase_sms_auth/feature/view/otp_verification_view.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,12 @@ import 'package:flutter/material.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  //FirebaseAuthManager
+  final auth = FirebaseAuthManager.instance.auth;
+
+  //
   TextEditingController controller = TextEditingController();
+
   AuthCubit() : super(AuthInitial());
 
   //
@@ -18,9 +23,12 @@ class AuthCubit extends Cubit<AuthState> {
   String selectedValue = "VBT";
   String selectedValueTR = "TR";
   String selectedValueCode = "TR";
-  String? otpCodee;
 
   String? _verificationId;
+  String get verificationId => _verificationId!;
+
+  String? _otpCodee;
+  String get otpCodee => _otpCodee!;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -57,7 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   otpSetState(String value) {
-    otpCodee = value;
+    _otpCodee = value;
     emit(OtpCodeUpdated());
   }
 

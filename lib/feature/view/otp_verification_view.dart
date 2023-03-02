@@ -71,7 +71,7 @@ class OtpVerificationView extends StatelessWidget {
                           ap.verificationOTP(
                             context: context,
                             verificationId: verificationId!,
-                            smsCode: ap.otpCodee!,
+                            smsCode: ap.otpCodee,
                             onSuccess: () {
                               Navigator.push(
                                   context,
