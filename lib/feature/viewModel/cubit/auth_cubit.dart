@@ -74,7 +74,6 @@ class AuthCubit extends Cubit<AuthState> {
         },
         codeSent: (verificationId, forceResendingToken) {
           buidPageRouteOTP(context, verificationId);
-          // _verificationId = verificationId;
         },
         codeAutoRetrievalTimeout: (verificationId) {},
       );

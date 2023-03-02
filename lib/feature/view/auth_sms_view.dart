@@ -128,12 +128,10 @@ class AuthSmsView extends StatelessWidget {
     );
   }
 
+  //buildSubmit
   void buildSubmit(BuildContext context) {
     String phoneNumber = "+90${phoneController.text.trim()}";
-    //BlocProvider.of<AuthCubit>(context).sendOTP(phoneNumber);
-    context
-        .read<AuthCubit>()
-        .signInWithPhone(context, phoneNumber);
+    context.read<AuthCubit>().signInWithPhone(context, phoneNumber);
   }
 
   //buildText Method
