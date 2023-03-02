@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_sms_auth/feature/view/auth_sms_view.dart';
 import 'package:firebase_sms_auth/feature/view/otp_verification_view.dart';
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
         initialRoute: "/",
         routes: {
           "/": (context) =>  AuthSmsView(),
-          "/otp": (context) => const OtpVerificationView(),
+          "/otp": (context) =>  OtpVerificationView(),
           "/success": (context) => const SuccessView(),
         },
       ),

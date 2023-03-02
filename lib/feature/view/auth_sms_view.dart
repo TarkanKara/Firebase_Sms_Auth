@@ -96,7 +96,6 @@ class AuthSmsView extends StatelessWidget {
                         child: TextFormField(
                           controller: phoneController,
                           keyboardType: TextInputType.number,
-                          //initialValue: "+90",
                           decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(color: Colors.red),
@@ -116,9 +115,7 @@ class AuthSmsView extends StatelessWidget {
                     backgroundColor: Colors.red.shade400,
                     foregroundColor: Colors.white,
                     onPressed: () {
-                      String phoneNumber = "+90${phoneController.text.trim()}";
-                      //BlocProvider.of<AuthCubit>(context).sendOTP(phoneNumber);
-                      context.read<AuthCubit>().sendOTP(phoneNumber);
+                      buildSubmit(context);
                     },
                     data: "SUBMİT",
                   ),
@@ -129,6 +126,14 @@ class AuthSmsView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void buildSubmit(BuildContext context) {
+    String phoneNumber = "+90${phoneController.text.trim()}";
+    //BlocProvider.of<AuthCubit>(context).sendOTP(phoneNumber);
+    context
+        .read<AuthCubit>()
+        .signInWithPhone(context, phoneNumber);
   }
 
   //buildText Method
