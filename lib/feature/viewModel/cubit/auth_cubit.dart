@@ -27,8 +27,7 @@ class AuthCubit extends Cubit<AuthState> {
   String? _verificationId;
   String get verificationId => _verificationId!;
 
-  String? _otpCodee;
-  String get otpCodee => _otpCodee!;
+  String? otpCodee;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -65,7 +64,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   otpSetState(String value) {
-    _otpCodee = value;
+    otpCodee = value;
     emit(OtpCodeUpdated());
   }
 
